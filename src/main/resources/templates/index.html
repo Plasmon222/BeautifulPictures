@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            /* 初始化 */
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* 100% 窗口高度 */
+            min-height: 100vh;
+            width: 100%;
+            /* 弹性布局 水平+垂直居中 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #06252e;
+            background-image: url("https://www.loliapi.com/acg/pc/");
+            background-size: cover; /* 让图片覆盖整个div */
+            background-position: center; /* 将图片居中显示 */
+        }
+
+        .box {
+            width: 100%;
+            /* 投影效果 */
+            -webkit-box-reflect: below 1px linear-gradient(transparent, rgba(0, 0, 0, 0.2));
+
+        }
+
+        .ziti {
+            color: #fff;
+            font-size: 40px;
+            /* 字间距 */
+            letter-spacing: 15px;
+            /* 转大写 */
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 76px;
+            outline: none;
+            /* 自定义属性 --c,可通过 var 函数对其调用 */
+            --c: lightseagreen;
+            /* 调用自定义属性--c，设置文字阴影（发光效果） */
+            text-shadow: 0 0 10px var(--c),
+            0 0 20px var(--c),
+            0 0 40px var(--c),
+            0 0 80px var(--c),
+            0 0 160px var(--c);
+            /* 执行动画：动画名 时长 线性的 无限次播放 */
+            animation: animate 10s linear infinite;
+        }
+
+        /* 定义动画 */
+        @keyframes animate {
+            to {
+                /* 色相旋转过滤镜（设置度数可改变颜色） */
+                filter: hue-rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<body>
+<div id="hello-vue" class="box" onclick="fun01()">
+    <!--  <h5 contenteditable="true"></h5>-->
+    <p id="pp1" class="ziti"></p>
+</div>
+</body>
+<script>
+    //一言
+    var yy = function () {
+        $.get("https://api.oick.cn/yiyan/api.php", function (data) {
+            // $.get("https://t.mwm.moe/ycy", function (data) {
+            $("#pp1").text(data)
+        })
+    }
+    var local = function () {
+        var base, ip, local, isp, lng, lat;
+        // 查ip
+        $.get("https://api.qjqq.cn/api/Local", function (data) {
+            localStorage.setItem("d1", data)
+            base = data.data;
+            lng = base.lng;
+            lat = base.lat;
+            ip = data.ip;
+            isp = base.isp;
+            local = base.continent + base.country + base.city + base.district;
+            var pd1 = sessionStorage.getItem("ip");
+            if (pd1 != ip) {
+                $(function () {
+                    // $.get("http://localhost:8080/ip/addIp", {
+                    $.get("http://loveak.site:8080/ip/addIp", {
+                            ip: ip,
+                            local: local,
+                            lng: lng,
+                            lat: lat,
+                            isp: isp
+                        },
+                        function (data) {
+                            console.log("re data")
+                            console.log(data)
+                        });
+                })
+                sessionStorage.setItem("ip", ip)
+            } else {
+                console.log("ip=ip")
+            }
+        });
+    }
+
+    $(function () {
+        yy();
+        // local();
+    })
+
+    function fun01() {
+        window.location.reload();
+    }
+</script>
+</html>
